@@ -12,7 +12,6 @@ services:
     networks:
       netbird:
         ipv4_address: 172.30.0.5
-      # - monitoring
     environment:
       PGID: "1000"
       COLLECTIONS: >-
@@ -37,8 +36,6 @@ services:
 networks:
   netbird:
     external: true
-#   monitoring:
-#     external: true
 
 volumes:
   crowdsec_data:
@@ -53,5 +50,3 @@ volumes:
       type: none
       o: bind
       device: /data/docker/volumes/crowdsec/crowdsec_config
-  # traefik_logs:
-    # external: true
