@@ -1,0 +1,24 @@
+---
+
+# yamllint configuration file
+# https://yamllint.readthedocs.io/en/stable/configuration.html
+
+extends: default
+
+rules:
+  comments:
+    level: error
+  comments-indentation:
+    level: error
+  document-end: disable
+  document-start: disable
+  line-length:
+    max: 110
+    level: warning
+  new-line-at-end-of-file: enable
+  trailing-spaces:
+    level: error
+  truthy: disable
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
