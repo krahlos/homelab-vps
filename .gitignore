@@ -7,4 +7,4 @@
 *.old
 *.backup
 
-secrets/**
+secrets/
