@@ -1,0 +1,18 @@
+[Unit]
+Description=Homelab Honeypot Services
+After=network.target
+Documentation=https://github.com/cowrie/cowrie
+PartOf=homelab-vps-apps.target
+Requires=docker.service
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/homelab-vps/honeypot
+ExecStart=/usr/bin/docker compose -p honeypot up -d
+ExecStop=/usr/bin/docker compose -p honeypot down
+
+[Install]
+WantedBy=homelab-vps-apps.target

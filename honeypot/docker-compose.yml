@@ -1,0 +1,30 @@
+---
+
+# Docker Compose file for Cowrie Honeypot
+
+x-cowrie-base: &cowrie-base
+  image: cowrie/cowrie:latest
+  restart: unless-stopped
+  user: "65534:65534"
+  security_opt:
+    - no-new-privileges:true
+  read_only: true
+  tmpfs:
+    - /tmp
+
+services:
+  cowrie-22:
+    <<: *cowrie-base
+    container_name: cowrie-22
+    ports:
+      - "22:2222"
+    volumes:
+      - ./data/cowrie-22:/cowrie/cowrie-git/var
+
+  cowrie-2222:
+    <<: *cowrie-base
+    container_name: cowrie-2222
+    ports:
+      - "2222:2222"
+    volumes:
+      - ./data/cowrie-2222:/cowrie/cowrie-git/var
