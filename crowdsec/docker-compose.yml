@@ -1,0 +1,57 @@
+---
+
+# docker-compose.yml for crowdsec
+
+name: crowdsec
+
+services:
+  crowdsec:
+    image: crowdsecurity/crowdsec:v1.7.7
+    container_name: crowdsec
+    restart: on-failure:3
+    networks:
+      netbird:
+        ipv4_address: 172.30.0.5
+      # - monitoring
+    environment:
+      PGID: "1000"
+      COLLECTIONS: >-
+        crowdsecurity/traefik crowdsecurity/http-cve
+        crowdsecurity/whitelist-good-actors crowdsecurity/iptables
+        crowdsecurity/linux
+    volumes:
+      - crowdsec_data:/var/lib/crowdsec/data
+      - crowdsec_config:/etc/crowdsec
+      # - traefik_logs:/var/log/traefik:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/log/auth.log:/var/log/auth.log:ro
+      - /var/log/syslog:/var/log/syslog:ro
+    expose:
+      - "6060"  # Metrics port
+    ports:
+      - "127.0.0.1:8180:8080"  # Local API port for host bouncer
+    labels:
+      - "traefik.enable=false"
+
+networks:
+  netbird:
+    external: true
+#   monitoring:
+#     external: true
+
+volumes:
+  crowdsec_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/docker/volumes/crowdsec/crowdsec_data
+  crowdsec_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/docker/volumes/crowdsec/crowdsec_config
+  # traefik_logs:
+    # external: true

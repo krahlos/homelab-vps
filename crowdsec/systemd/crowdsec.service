@@ -1,0 +1,20 @@
+[Unit]
+Description=Docker compose stack for crowdsec service
+After=network.target
+Documentation=https://app.crowdsec.net https://docs.crowdsec.net/docs/next/cscli/
+PartOf=homelab-vps-infra.target
+Requires=docker.service
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/homelab-vps/crowdsec
+ExecStart=/usr/bin/docker compose -p crowdsec up -d
+ExecStop=/usr/bin/docker compose -p crowdsec down
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=homelab-vps-infra.target
