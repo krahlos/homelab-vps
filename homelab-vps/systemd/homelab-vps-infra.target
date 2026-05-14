@@ -1,0 +1,7 @@
+[Unit]
+Description=Homelab VPS Infrastructure
+After=network-online.target docker.service
+PartOf=homelab-vps.target
+
+[Install]
+WantedBy=homelab-vps.target

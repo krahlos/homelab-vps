@@ -1,0 +1,7 @@
+[Unit]
+Description=Homelab VPS Monitoring
+After=homelab-vps-infra.target
+PartOf=homelab-vps.target
+
+[Install]
+WantedBy=homelab-vps.target

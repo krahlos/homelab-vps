@@ -1,0 +1,7 @@
+[Unit]
+Description=Homelab VPS Umbrella Target
+Wants=homelab-vps-infra.target homelab-vps-apps.target homelab-vps-monitoring.target
+After=homelab-vps-infra.target homelab-vps-apps.target homelab-vps-monitoring.target
+
+[Install]
+WantedBy=multi-user.target
