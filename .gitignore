@@ -1,0 +1,10 @@
+*/temp/**
+*/tmp/**
+*.tmp
+*.log
+*.bak
+*.swp
+*.old
+*.backup
+
+secrets/**
