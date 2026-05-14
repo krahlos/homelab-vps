@@ -1,0 +1,19 @@
+[Unit]
+Description=Docker compose stack for Traefik reverse proxy
+Documentation=https://doc.traefik.io/traefik/
+PartOf=homelab-vps-infra.target
+Requires=docker.service
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/homelab-vps/traefik
+ExecStart=/usr/bin/docker compose -p traefik up -d
+ExecStop=/usr/bin/docker compose -p traefik down
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=homelab-vps-infra.target

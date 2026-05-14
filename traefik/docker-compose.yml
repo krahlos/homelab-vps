@@ -1,0 +1,48 @@
+---
+
+# Docker Compose file for Traefik reverse proxy
+
+services:
+  # Traefik reverse proxy (automatic TLS via Let's Encrypt)
+  traefik:
+    image: traefik:v3.6
+    container_name: netbird-traefik
+    restart: unless-stopped
+    networks:
+      netbird:
+        ipv4_address: 172.30.0.10
+    command:
+      - --configFile=/etc/traefik/traefik.yml
+    ports:
+      - '443:443'
+      - '80:80'
+    volumes:
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./config/dynamic:/etc/traefik/dynamic:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - netbird_traefik_letsencrypt:/letsencrypt
+      - traefik_logs:/var/log/traefik
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+
+volumes:
+  netbird_traefik_letsencrypt:
+  traefik_logs:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/docker/volumes/traefik/traefik_logs
+
+networks:
+  netbird:
+    external: true
+
+secrets:
+  crowdsec_api_key:
+    file: ./secrets/crowdsec_api_key.txt

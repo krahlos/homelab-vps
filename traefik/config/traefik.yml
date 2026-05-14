@@ -1,0 +1,70 @@
+---
+
+# Static configuration file for Traefik reverse proxy
+
+log:
+  level: INFO
+  filePath: /var/log/traefik/traefik.log
+  format: json
+
+accessLog:
+  filePath: /var/log/traefik/access.log
+  format: json
+  filters:
+    statusCodes:
+      - "400-599"
+  bufferingSize: 0
+  fields:
+    headers:
+      defaultMode: drop
+      names:
+        User-Agent: keep
+
+providers:
+  docker:
+    exposedByDefault: false
+    network: netbird
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+    allowACMEByPass: true
+    transport:
+      respondingTimeouts:
+        readTimeout: 0
+        writeTimeout: 0
+        idleTimeout: 0
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: marco-krahl@web.de
+      storage: /letsencrypt/acme.json
+      tlsChallenge: {}
+
+serversTransport:
+  forwardingTimeouts:
+    responseHeaderTimeout: 0s
+    idleConnTimeout: 0s
+
+experimental:
+  plugins:
+    crowdsec-bouncer:
+      moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
+      version: "v1.5.1"
+    fail2ban:
+      moduleName: "github.com/tomMoulard/fail2ban"
+      version: "v0.9.0"
+    geoblock:
+      moduleName: "github.com/PascalMinder/geoblock"
+      version: "v0.3.7"

@@ -1,0 +1,18 @@
+---
+
+# CrowdSec middleware configuration for Traefik
+
+http:
+  middlewares:
+    crowdsec:
+      plugin:
+        crowdsec-bouncer-traefik-plugin:
+          enabled: true
+          crowdsecLapiKey: /run/secrets/crowdsec_api_key
+          crowdsecLapiHost: crowdsec:8080
+          crowdsecLapiScheme: http
+          crowdsecMode: live
+          updateIntervalSeconds: 60
+          defaultDecisionSeconds: 60
+          httpTimeoutSeconds: 10
+          crowdsecLapiTLSInsecureVerify: false

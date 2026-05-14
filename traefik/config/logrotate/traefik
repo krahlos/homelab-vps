@@ -1,0 +1,13 @@
+/data/docker/volumes/traefik/traefik_logs/traefik.log
+/data/docker/volumes/traefik/traefik_logs/access.log
+/data/docker/volumes/traefik/traefik_logs/geoblock.log
+{
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+    su traefik traefik
+}
