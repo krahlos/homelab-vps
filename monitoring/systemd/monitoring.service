@@ -1,0 +1,19 @@
+[Unit]
+Description=Docker compose stack for monitoring services
+After=network.target
+PartOf=homelab-vps-monitoring.target
+Requires=docker.service
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/homelab-vps/monitoring
+ExecStart=/usr/bin/docker compose -p monitoring up -d
+ExecStop=/usr/bin/docker compose -p monitoring down
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=homelab-vps-monitoring.target
