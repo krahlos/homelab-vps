@@ -4,7 +4,6 @@
 import json
 import logging
 import os
-import socket
 import subprocess
 import time
 import urllib.error
@@ -64,7 +63,7 @@ logging.basicConfig(level=logging.INFO, handlers=[_handler])
 logger = logging.getLogger("crowdsec-summary")
 
 MATRIX_WEBHOOK_BRIDGE_URL = os.environ.get("MATRIX_WEBHOOK_BRIDGE_URL", "http://100.69.1.1:5001")
-HOST_LABEL = os.environ.get("HOST_LABEL", socket.gethostname())
+HOST_LABEL = os.environ.get("HOST_LABEL", "homelab-vps")
 SINCE = os.environ.get("SINCE", "24h")
 TOP_TARGETS = int(os.environ.get("TOP_TARGETS", "5"))
 TOP_COUNTRIES = int(os.environ.get("TOP_COUNTRIES", "5"))
