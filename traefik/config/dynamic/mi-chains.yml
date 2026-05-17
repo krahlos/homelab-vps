@@ -1,0 +1,36 @@
+---
+
+# Middleware Chains for Traefik
+
+http:
+  middlewares:
+    # Chain of middlewares for app protection
+    web-protect:
+      chain:
+        middlewares:
+          - rate-limit@file
+          - in-flight-req@file
+          - geoblock@file
+          - crowdsec-bouncer@file
+          - fail2ban@file
+
+    # Chain of middlewares for app protection on websecure entrypoint
+    websecure-protect:
+      chain:
+        middlewares:
+          - web-protect@file
+          - security-headers@file
+
+    # Chain for internal/IP-restricted services (HTTP)
+    internal-protect:
+      chain:
+        middlewares:
+          - ip-allowlist@file
+          - web-protect@file
+
+    # Chain for internal/IP-restricted services (HTTPS)
+    internal-secure-protect:
+      chain:
+        middlewares:
+          - ip-allowlist@file
+          - websecure-protect@file

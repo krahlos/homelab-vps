@@ -1,0 +1,25 @@
+---
+
+# fail2ban middleware configuration for traefik
+
+http:
+  middlewares:
+    fail2ban:
+      plugin:
+        fail2ban:
+          logLevel: WARN
+          rules:
+            enabled: true
+            bantime: "3h"
+            findtime: "10m"
+            maxretry: 5
+            statuscode: "400-403,405-410,500-599"
+          allowlist:
+            ip:
+              - "127.0.0.1/32"        # localhost IPv4
+              - "::1/128"             # localhost IPv6
+              - "172.0.0.0/8"         # All Docker networks
+              - "192.168.178.0/24"    # FritzBox subnet
+              - "10.0.0.0/24"         # WireGuard VPN subnet
+          denylist:
+            ip: []

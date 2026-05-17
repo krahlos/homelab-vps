@@ -1,0 +1,10 @@
+---
+
+# Basic Auth Middleware for Traefik
+
+http:
+  middlewares:
+    auth-basic:
+      basicAuth:
+        users:
+          - "admin:$apr1$3xFwlwaQ$i1h0oKHqupUl0sjv6bv9z."

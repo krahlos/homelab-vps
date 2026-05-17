@@ -1,0 +1,25 @@
+---
+
+# Reject direct IP access and unmatched hosts.
+# noop@internal returns 200 with empty body — no real service is reached.
+# websecure-protect still applies so banned IPs get 403 from CrowdSec.
+
+http:
+  routers:
+    reject-direct-ip:
+      entryPoints:
+        - websecure
+      rule: "HostRegexp(`^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$`)"
+      service: noop@internal
+      middlewares:
+        - websecure-protect@file
+      priority: 10
+
+    reject-catchall:
+      entryPoints:
+        - websecure
+      rule: "HostRegexp(`.+`)"
+      service: noop@internal
+      middlewares:
+        - websecure-protect@file
+      priority: 1

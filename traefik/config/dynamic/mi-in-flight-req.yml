@@ -1,0 +1,12 @@
+---
+
+# in-flight-req middleware configuration for traefik
+
+http:
+  middlewares:
+    in-flight-req:
+      inFlightReq:
+        amount: 150
+        sourceCriterion:
+          ipStrategy:
+            depth: 1

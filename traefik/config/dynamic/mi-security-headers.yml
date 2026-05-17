@@ -1,0 +1,25 @@
+---
+
+# security headers middleware configuration for traefik
+
+http:
+  middlewares:
+    security-headers:
+      headers:
+        frameDeny: true
+        # browserXssFilter removed (legacy); modern browsers ignore it.
+        contentTypeNosniff: true
+        # HSTS: 1 year, includes subdomains, preload enabled. Ensure all subdomains are HTTPS.
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        customResponseHeaders:
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex"
+          X-Permitted-Cross-Domain-Policies: "none"
+          Referrer-Policy: "strict-origin-when-cross-origin"
+          Permissions-Policy: "geolocation=(), microphone=(), camera=(), payment=()"
+          X-DNS-Prefetch-Control: "off"
+          X-Download-Options: "noopen"
+          # Placeholder CSP (commented). Tailor per app before enabling.
+          # Content-Security-Policy: "default-src 'self'; object-src 'none'; base-uri 'self';
+          #   frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"

@@ -1,0 +1,28 @@
+---
+
+# Geo-blocking middleware configuration for Traefik
+
+http:
+  middlewares:
+    de-only:
+      plugin:
+        geoblock:
+          logFilePath: /var/log/traefik/geoblock.log
+          silentStartUp: false
+          allowLocalRequests: true
+          logLocalRequests: false
+          logAllowedRequests: false
+          logApiRequests: false
+          api: "https://get.geojs.io/v1/ip/country/{ip}"
+          apiTimeoutMs: 750
+          cacheSize: 512
+          forceMonthlyUpdate: true
+          allowUnknownCountries: false
+          unknownCountryApiResponse: "nil"
+          allowedIPAddresses:
+            - "127.0.0.1/32"        # localhost IPv4
+            - "::1/128"             # localhost IPv6
+            - "172.0.0.0/8"         # All Docker networks
+            - "10.0.0.0/24"         # WireGuard VPN subnet
+          countries:
+            - DE
