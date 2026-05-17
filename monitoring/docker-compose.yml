@@ -27,6 +27,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     pid: host
+    uts: "host"
     user: "65534:65534"
     security_opt:
       - no-new-privileges:true
