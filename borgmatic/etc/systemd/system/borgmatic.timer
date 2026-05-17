@@ -1,0 +1,15 @@
+[Unit]
+Description=Run borgmatic backup nightly
+Documentation=https://torsion.org/borgmatic/
+PartOf=homelab-vps-infra.target
+
+[Timer]
+# Run nightly
+OnCalendar=*-*-* 04:00:00
+# Spread start time by up to 5 minutes to avoid exact-second stampede
+RandomizedDelaySec=5min
+# If the system was off, run as soon as it comes back up
+Persistent=true
+
+[Install]
+WantedBy=homelab-vps-infra.target

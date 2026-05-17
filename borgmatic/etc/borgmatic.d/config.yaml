@@ -1,0 +1,42 @@
+---
+
+# borgmatic configuration
+# Docs: https://torsion.org/borgmatic/docs/reference/configuration/
+
+repositories:
+  - path: /data/backup/borg
+    label: local-ssd
+
+source_directories:
+  # All bind-mounted service volumes
+  - /data/docker/volumes
+  # Service secrets — never skip these
+  - /opt/secrets/
+
+exclude_patterns: []
+
+exclude_if_present:
+  - .nobackup
+
+compression: lz4
+
+# Passphrase is read from a file, never stored in this config.
+# See setup instructions at the top of this file.
+encryption_passcommand: cat /opt/secrets/borgmatic/passphrase.txt
+
+# keep_daily: 1 per user request for local SSD backup.
+# When adding a remote repository, add keep_weekly/keep_monthly there.
+keep_daily: 1
+
+checks:
+  - name: repository
+    frequency: always
+  - name: archives
+    frequency: always
+
+after_backup:
+  - test -d /var/lib/borgmatic/dumps && find /var/lib/borgmatic/dumps -mindepth 1 -delete || true
+  - /etc/borgmatic/hooks/notify.sh success
+on_error:
+  - test -d /var/lib/borgmatic/dumps && find /var/lib/borgmatic/dumps -mindepth 1 -delete || true
+  - /etc/borgmatic/hooks/notify.sh error

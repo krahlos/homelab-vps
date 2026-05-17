@@ -1,0 +1,26 @@
+[Unit]
+Description=borgmatic backup
+Documentation=https://torsion.org/borgmatic/
+PartOf=homelab-vps-infra.target
+Wants=network-online.target
+After=network-online.target
+# Ensure docker is up before we try to exec into containers
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+# Raise the nofile limit so borg can handle large archives
+LimitNOFILE=524288
+
+ExecStart=/usr/bin/borgmatic \
+    --config /etc/borgmatic.d/config.yaml \
+    --verbosity 1 \
+    --syslog-verbosity 1
+
+# Avoid OOM-killing the backup process
+OOMScoreAdjust=-100
+
+# Keep the journal around after the run for post-mortem inspection
+StandardOutput=journal
+StandardError=journal
