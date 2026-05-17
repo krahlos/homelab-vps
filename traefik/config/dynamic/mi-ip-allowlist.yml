@@ -1,0 +1,14 @@
+---
+
+# IP allowlist middleware for internal-only routes
+
+http:
+  middlewares:
+    ip-allowlist:
+      ipAllowList:
+        sourceRange:
+          - "127.0.0.1/32"      # localhost IPv4
+          - "::1/128"           # localhost IPv6
+          - "172.0.0.0/8"       # Docker networks
+          - "192.168.178.0/24"  # FritzBox LAN
+          - "10.0.0.0/24"       # WireGuard VPN

@@ -24,6 +24,8 @@ services:
       - traefik_logs:/var/log/traefik
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+    secrets:
+      - crowdsec_api_key
     logging:
       driver: "json-file"
       options:
