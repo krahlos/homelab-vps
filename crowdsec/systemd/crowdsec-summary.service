@@ -1,0 +1,11 @@
+[Unit]
+Description=Send daily CrowdSec block summary via dispatcher
+PartOf=homelab-vps-infra.target
+After=crowdsec.service
+Requires=crowdsec.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/homelab-vps/crowdsec/scripts/notify-summary.py
+Environment=MATRIX_WEBHOOK_BRIDGE_URL=http://100.69.1.1:5001
+Environment=SINCE=24h

@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily CrowdSec block summary
+PartOf=homelab-vps-infra.target
+Requires=crowdsec-summary.service
+
+[Timer]
+OnCalendar=*-*-* 12:00:00
+Persistent=true
+
+[Install]
+WantedBy=homelab-vps-infra.target
