@@ -5,6 +5,8 @@
 global:
   sendAnonymousUsage: false
 
+ping: {}
+
 log:
   level: INFO
   filePath: /var/log/traefik/traefik.log
@@ -32,6 +34,8 @@ providers:
     watch: true
 
 entryPoints:
+  traefik:
+    address: ":8081"
   web:
     address: ":80"
     http:
