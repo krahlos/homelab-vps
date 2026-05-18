@@ -1,0 +1,23 @@
+[Unit]
+Description=Daily scheduled rkhunter update and scan
+Documentation=https://wiki.ubuntuusers.de/rkhunter/
+PartOf=homelab-vps-infra.target
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/rkhunter --check --cronjob --quiet --report-warnings-only --skip-keypress
+User=root
+
+# Logging - integrates with Loki via config.alloy
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=rkhunter
+
+# Security hardening
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectControlGroups=true
+RestrictNamespaces=true
+RestrictRealtime=true
+LockPersonality=true

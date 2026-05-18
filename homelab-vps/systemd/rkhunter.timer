@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer for daily scheduled rkhunter scan
+Documentation=https://wiki.ubuntuusers.de/rkhunter/
+PartOf=homelab-vps-infra.target
+
+[Timer]
+OnCalendar=*-*-* 06:00:00
+Persistent=true
+
+[Install]
+WantedBy=homelab-vps-infra.target
