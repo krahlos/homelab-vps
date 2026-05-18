@@ -26,6 +26,9 @@ services:
       - /etc/timezone:/etc/timezone:ro
     secrets:
       - crowdsec_api_key
+      - infomaniak_access_token
+    environment:
+      - INFOMANIAK_ACCESS_TOKEN_FILE=/run/secrets/infomaniak_access_token
     logging:
       driver: "json-file"
       options:
@@ -48,3 +51,5 @@ networks:
 secrets:
   crowdsec_api_key:
     file: ./secrets/crowdsec_api_key.txt
+  infomaniak_access_token:
+    file: ./secrets/infomaniak_access_token.txt

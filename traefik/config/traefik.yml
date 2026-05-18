@@ -54,6 +54,12 @@ certificatesResolvers:
       email: marco-krahl@web.de
       storage: /letsencrypt/acme.json
       tlsChallenge: {}
+  letsencrypt-dns:
+    acme:
+      email: marco-krahl@web.de
+      storage: /letsencrypt/acme.json
+      dnsChallenge:
+        provider: infomaniak
 
 serversTransport:
   forwardingTimeouts:
