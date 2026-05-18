@@ -1,0 +1,43 @@
+---
+
+# Temporary: routes mail.krahl.io to the home server over NetBird.
+# Long-term, all public services will route through NetBird directly
+# and this file will be removed.
+
+http:
+  serversTransports:
+    mailcow-transport:
+      insecureSkipVerify: true
+
+  routers:
+    mailcow-admin:
+      entryPoints:
+        - websecure
+      rule: Host(`mail.krahl.io`) && PathPrefix(`/admin`)
+      service: mailcow-backend@file
+      tls:
+        certResolver: letsencrypt
+      priority: 100
+      middlewares:
+        - de-only@file
+        - websecure-protect@file
+        - auth-basic@file
+
+    mailcow:
+      entryPoints:
+        - websecure
+      rule: "Host(`mail.krahl.io`)"
+      service: mailcow-backend@file
+      tls:
+        certResolver: letsencrypt
+      priority: 50
+      middlewares:
+        - de-only@file
+        - websecure-protect@file
+
+  services:
+    mailcow-backend:
+      loadBalancer:
+        serversTransport: mailcow-transport
+        servers:
+          - url: "https://100.69.1.1:443"
