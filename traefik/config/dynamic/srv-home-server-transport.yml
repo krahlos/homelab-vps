@@ -1,0 +1,10 @@
+---
+
+# Shared serversTransport for all home-server services routed via NetBird.
+# insecureSkipVerify is required because the home-server Traefik presents a
+# cert for the public hostname, not for the NetBird IP (100.69.1.1).
+
+http:
+  serversTransports:
+    home-server-transport:
+      insecureSkipVerify: true

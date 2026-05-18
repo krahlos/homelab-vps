@@ -5,10 +5,6 @@
 # and this file will be removed.
 
 http:
-  serversTransports:
-    mailcow-transport:
-      insecureSkipVerify: true
-
   routers:
     mailcow-admin:
       entryPoints:
@@ -38,6 +34,6 @@ http:
   services:
     mailcow-backend:
       loadBalancer:
-        serversTransport: mailcow-transport
+        serversTransport: home-server-transport
         servers:
           - url: "https://100.69.1.1:443"
