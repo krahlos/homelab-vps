@@ -1,0 +1,23 @@
+---
+
+# HAProxy configuration for TCP proxying of mail services
+
+services:
+  haproxy:
+    image: haproxy:2.8-alpine
+    container_name: haproxy
+    # Run as root but keep only the single capability required for low-port binds.
+    user: "0:0"
+    cap_drop: ["ALL"]
+    cap_add: ["NET_BIND_SERVICE"]
+    security_opt:
+      - no-new-privileges:true
+    restart: on-failure:3
+    network_mode: host
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
