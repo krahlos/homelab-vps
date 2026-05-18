@@ -60,6 +60,19 @@ serversTransport:
     responseHeaderTimeout: 0s
     idleConnTimeout: 0s
 
+metrics:
+  prometheus:
+    entryPoint: traefik
+    addEntryPointsLabels: true
+    addServicesLabels: true
+    addRoutersLabels: true
+
+tracing:
+  otlp:
+    http:
+      endpoint: "http://100.69.1.1:4318/v1/traces"
+  sampleRate: 1.0
+
 experimental:
   plugins:
     crowdsec-bouncer:
