@@ -1,0 +1,22 @@
+---
+
+# krahl.io — VPS ingress for the home-server website.
+
+http:
+  routers:
+    krahl-io:
+      entryPoints:
+        - websecure
+      rule: Host(`krahl.io`)
+      service: krahl-io-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+      middlewares:
+        - websecure-protect@file
+
+  services:
+    krahl-io-backend:
+      loadBalancer:
+        serversTransport: home-server-transport
+        servers:
+          - url: "https://100.69.1.1:443"
