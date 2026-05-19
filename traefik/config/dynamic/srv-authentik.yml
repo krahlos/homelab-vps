@@ -1,0 +1,22 @@
+---
+
+# auth.krahl.io — VPS ingress for the home-server Authentik instance.
+
+http:
+  routers:
+    authentik:
+      entryPoints:
+        - websecure
+      rule: Host(`auth.krahl.io`)
+      service: authentik-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+      middlewares:
+        - websecure-protect@file
+
+  services:
+    authentik-backend:
+      loadBalancer:
+        serversTransport: home-server-transport
+        servers:
+          - url: "https://100.69.1.1:443"
