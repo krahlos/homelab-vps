@@ -18,8 +18,9 @@ http:
             ip:
               - "127.0.0.1/32"        # localhost IPv4
               - "::1/128"             # localhost IPv6
-              - "172.0.0.0/8"         # All Docker networks
-              - "192.168.178.0/24"    # FritzBox subnet
-              - "10.0.0.0/24"         # WireGuard VPN subnet
+              - "172.0.0.0/8"         # Docker networks
+              - "192.168.178.0/24"    # FritzBox LAN
+              - "10.0.0.0/24"         # WireGuard VPN
+              - "100.64.0.0/10"       # Netbird VPN
           denylist:
             ip: []
