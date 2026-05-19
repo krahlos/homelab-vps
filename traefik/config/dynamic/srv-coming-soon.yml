@@ -1,0 +1,23 @@
+---
+
+# abc.krahl.io — VPS ingress for the home-server coming-soon page.
+
+http:
+  routers:
+    coming-soon:
+      entryPoints:
+        - websecure
+      rule: Host(`abc.krahl.io`)
+      service: coming-soon-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+      middlewares:
+        - de-only@file
+        - websecure-protect@file
+
+  services:
+    coming-soon-backend:
+      loadBalancer:
+        serversTransport: home-server-transport
+        servers:
+          - url: "https://100.69.1.1:443"
