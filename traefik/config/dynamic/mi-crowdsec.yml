@@ -8,7 +8,7 @@ http:
       plugin:
         crowdsec-bouncer:
           enabled: true
-          crowdsecLapiKey: /run/secrets/crowdsec_api_key
+          crowdsecLapiKeyFile: /run/secrets/crowdsec_api_key
           crowdsecLapiHost: crowdsec:8080
           crowdsecLapiScheme: http
           crowdsecMode: live
