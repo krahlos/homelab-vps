@@ -12,7 +12,7 @@ http:
       rule: Host(`mail.krahl.io`) && PathPrefix(`/admin`)
       service: mailcow-backend@file
       tls:
-        certResolver: letsencrypt
+        certResolver: letsencrypt-dns
       priority: 100
       middlewares:
         - de-only@file
@@ -25,7 +25,7 @@ http:
       rule: "Host(`mail.krahl.io`)"
       service: mailcow-backend@file
       tls:
-        certResolver: letsencrypt
+        certResolver: letsencrypt-dns
       priority: 50
       middlewares:
         - de-only@file
