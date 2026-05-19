@@ -1,0 +1,22 @@
+---
+
+# paste.krahl.io — VPS ingress for the home-server MicroBin instance.
+
+http:
+  routers:
+    microbin:
+      entryPoints:
+        - websecure
+      rule: Host(`paste.krahl.io`)
+      service: microbin-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+      middlewares:
+        - websecure-protect@file
+
+  services:
+    microbin-backend:
+      loadBalancer:
+        serversTransport: home-server-transport
+        servers:
+          - url: "https://100.69.1.1:443"
