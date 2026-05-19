@@ -1,0 +1,28 @@
+---
+
+# matrix.krahl.io — VPS ingress for the home-server Matrix Synapse instance.
+
+http:
+  routers:
+    matrix-synapse:
+      entryPoints:
+        - websecure
+      rule: Host(`matrix.krahl.io`)
+      service: matrix-synapse-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+
+    matrix-synapse-federation:
+      entryPoints:
+        - websecure
+      rule: Host(`matrix.krahl.io`) && PathPrefix(`/_matrix`)
+      service: matrix-synapse-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+
+  services:
+    matrix-synapse-backend:
+      loadBalancer:
+        serversTransport: home-server-transport
+        servers:
+          - url: "https://100.69.1.1:443"
