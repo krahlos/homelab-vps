@@ -1,0 +1,22 @@
+---
+
+# plausible.krahl.io — VPS ingress for the home-server Plausible Analytics instance.
+
+http:
+  routers:
+    plausible:
+      entryPoints:
+        - websecure
+      rule: Host(`plausible.krahl.io`)
+      service: plausible-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+      middlewares:
+        - websecure-protect@file
+
+  services:
+    plausible-backend:
+      loadBalancer:
+        serversTransport: home-server-transport
+        servers:
+          - url: "https://100.69.1.1:443"
