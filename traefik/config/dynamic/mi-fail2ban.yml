@@ -13,7 +13,7 @@ http:
             bantime: "3h"
             findtime: "10m"
             maxretry: 5
-            statuscode: "400-403,405-410,500-599"
+            statuscode: "400-402,405-410,500-599"
           allowlist:
             ip:
               - "127.0.0.1/32"        # localhost IPv4
