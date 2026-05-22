@@ -4,7 +4,7 @@
 
 services:
   haproxy:
-    image: haproxy:2.8-alpine
+    image: haproxy:3.3.10-alpine
     container_name: haproxy
     # Run as root but keep only the single capability required for low-port binds.
     user: "0:0"

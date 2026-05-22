@@ -6,7 +6,7 @@ name: crowdsec
 
 services:
   crowdsec:
-    image: crowdsecurity/crowdsec:v1.7.7
+    image: crowdsecurity/crowdsec:v1.7.8
     container_name: crowdsec
     restart: on-failure:3
     networks:
@@ -21,7 +21,7 @@ services:
     volumes:
       - crowdsec_data:/var/lib/crowdsec/data
       - crowdsec_config:/etc/crowdsec
-      # - traefik_logs:/var/log/traefik:ro
+      - traefik_logs:/var/log/traefik:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - /var/log/auth.log:/var/log/auth.log:ro
@@ -50,3 +50,6 @@ volumes:
       type: none
       o: bind
       device: /data/docker/volumes/crowdsec/crowdsec_config
+  traefik_logs:
+    name: traefik_traefik_logs
+    external: true
