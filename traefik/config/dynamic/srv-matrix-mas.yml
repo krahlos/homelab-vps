@@ -12,7 +12,7 @@ http:
       tls:
         certResolver: letsencrypt-dns
       middlewares:
-        - websecure-protect@file
+        - weak-websecure-protect@file
 
   services:
     matrix-mas-backend:
