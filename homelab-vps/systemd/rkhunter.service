@@ -6,7 +6,8 @@ After=multi-user.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/rkhunter --check --cronjob --quiet --report-warnings-only --skip-keypress
+ExecStart=/opt/homelab-vps/homelab-vps/scripts/rkhunter.sh
+Environment=DISPATCHER_URL=http://100.69.1.1:5001
 User=root
 
 # Logging - integrates with Loki via config.alloy
