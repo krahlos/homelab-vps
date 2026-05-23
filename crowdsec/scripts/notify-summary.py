@@ -133,7 +133,7 @@ def build_payload(alerts: list, active_count: int) -> dict:
         scenario = _short_scenario(alert.get("scenario", "?"))
         target = _target(alert)
 
-        decisions = alert.get("decisions", [])
+        decisions = alert.get("decisions") or []
         ban_count = len(decisions)
         total_bans += ban_count
         unique_ips.add(ip)
@@ -244,7 +244,7 @@ def main() -> None:
         logger.info("No bans found in digest window — skipping.")
         return
 
-    logger.info("Sending digest: %s bans, %s active.", sum(len(a.get("decisions", [])) for a in alerts), active_count)
+    logger.info("Sending digest: %s bans, %s active.", sum(len(a.get("decisions") or []) for a in alerts), active_count)
     send(payload)
     logger.info("Done.")
 
