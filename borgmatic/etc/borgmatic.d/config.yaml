@@ -10,8 +10,10 @@ repositories:
 source_directories:
   # All bind-mounted service volumes
   - /data/docker/volumes
+  # Infrastructure-as-code and other config files
+  - /opt/homelab-vps
   # Service secrets — never skip these
-  - /opt/secrets/
+  - /opt/secrets
 
 exclude_patterns: []
 
@@ -26,7 +28,9 @@ encryption_passcommand: cat /opt/secrets/borgmatic/passphrase.txt
 
 # keep_daily: 1 per user request for local SSD backup.
 # When adding a remote repository, add keep_weekly/keep_monthly there.
-keep_daily: 1
+keep_daily: 14
+keep_weekly: 8
+keep_monthly: 12
 
 checks:
   - name: repository
