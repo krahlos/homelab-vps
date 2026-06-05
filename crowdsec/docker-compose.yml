@@ -15,9 +15,16 @@ services:
     environment:
       PGID: "1000"
       COLLECTIONS: >-
-        crowdsecurity/traefik crowdsecurity/http-cve
-        crowdsecurity/whitelist-good-actors crowdsecurity/iptables
+        crowdsecurity/dovecot
+        crowdsecurity/haproxy
+        crowdsecurity/http-cve
+        crowdsecurity/iptables
         crowdsecurity/linux
+        crowdsecurity/sshd
+        crowdsecurity/postfix
+        crowdsecurity/traefik
+        crowdsecurity/whitelist-good-actors
+        firix/authentik
     volumes:
       - crowdsec_data:/var/lib/crowdsec/data
       - crowdsec_config:/etc/crowdsec
