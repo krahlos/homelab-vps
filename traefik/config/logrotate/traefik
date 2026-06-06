@@ -9,5 +9,5 @@
     missingok
     notifempty
     copytruncate
-    su traefik traefik
+    su root root
 }
