@@ -68,6 +68,7 @@ SINCE = os.environ.get("SINCE", "24h")
 TOP_TARGETS = int(os.environ.get("TOP_TARGETS", "5"))
 TOP_COUNTRIES = int(os.environ.get("TOP_COUNTRIES", "5"))
 TOP_OFFENDERS = int(os.environ.get("TOP_OFFENDERS", "3"))
+VERBOSE = os.environ.get("VERBOSE", "0").lower() in ("1", "true", "yes")
 
 
 def _run_cscli(*args: str) -> list:
@@ -167,24 +168,26 @@ def build_payload(alerts: list, active_count: int) -> dict:
     # --- plain text ---
     lines = [
         f"🛡️ CrowdSec Daily Summary [{HOST_LABEL}] — {date_str}",
-        f"{total_bans} bans · {len(unique_ips)} IPs · {scenario_count} scenarios",
+        f"{total_bans} bans · {active_count} active · {len(unique_ips)} IPs · {scenario_count} scenarios",
         "",
         "By target:",
     ]
     for tgt, count in top:
         lines.append(f"{_display_target(tgt)} — {count} bans")
-        for s in sorted(target_scenarios[tgt]):
-            lines.append(f"• {s}")
+        if VERBOSE:
+            for s in sorted(target_scenarios[tgt]):
+                lines.append(f"• {s}")
     if other > 0:
         lines.append(f"+ {other} more")
 
     lines += ["", "Countries:", country_str, ""]
-    lines.append("Top offenders:")
-    for ip, count in offender_counter.most_common(TOP_OFFENDERS):
-        lines.append(f"{ip} — {count} bans")
-        lines.append(f"• {offender_meta[ip]}")
+    if VERBOSE:
+        lines.append("Top offenders:")
+        for ip, count in offender_counter.most_common(TOP_OFFENDERS):
+            lines.append(f"{ip} — {count} bans")
+            lines.append(f"• {offender_meta[ip]}")
 
-    lines += ["", f"Active bans: {active_count}"]
+    # lines += ["", f"Active bans: {active_count}"]
     plain = "\n".join(lines)
 
     # --- html ---
@@ -193,24 +196,26 @@ def build_payload(alerts: list, active_count: int) -> dict:
 
     html_lines = [
         f"<b>🛡️ CrowdSec Daily Summary [{h(HOST_LABEL)}] — {h(date_str)}</b><br>",
-        f"{total_bans} bans · {len(unique_ips)} IPs · {scenario_count} scenarios",
+        f"{total_bans} bans · {active_count} active · {len(unique_ips)} IPs · {scenario_count} scenarios",
         "<br><br><b>By target:</b><br>",
     ]
     for tgt, count in top:
         html_lines.append(f"<b>{h(_display_target(tgt))}</b> — {count} bans<br>")
-        for s in sorted(target_scenarios[tgt]):
-            html_lines.append(f"&nbsp;&nbsp;• {h(s)}<br>")
+        if VERBOSE:
+            for s in sorted(target_scenarios[tgt]):
+                html_lines.append(f"&nbsp;&nbsp;• {h(s)}<br>")
     if other > 0:
         html_lines.append(f"+ {other} more</i><br>")
 
     html_lines.append(f"<br><b>Countries:</b><br>{h(country_str)}<br>")
 
-    html_lines.append("<br><b>Top offenders:</b><br>")
-    for ip, count in offender_counter.most_common(TOP_OFFENDERS):
-        html_lines.append(f"<b>{h(ip)}</b> — {count} bans<br>")
-        html_lines.append(f"&nbsp;&nbsp;• {h(offender_meta[ip])}<br>")
+    if VERBOSE:
+        html_lines.append("<br><b>Top offenders:</b><br>")
+        for ip, count in offender_counter.most_common(TOP_OFFENDERS):
+            html_lines.append(f"<b>{h(ip)}</b> — {count} bans<br>")
+            html_lines.append(f"&nbsp;&nbsp;• {h(offender_meta[ip])}<br>")
 
-    html_lines.append(f"<br><b>Active bans:</b> {active_count}")
+    # html_lines.append(f"<br><b>Active bans:</b> {active_count}")
     html = "".join(html_lines)
 
     return {"body": plain, "html": html}
