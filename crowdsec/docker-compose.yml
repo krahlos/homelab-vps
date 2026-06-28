@@ -24,15 +24,14 @@ services:
         crowdsecurity/postfix
         crowdsecurity/traefik
         crowdsecurity/whitelist-good-actors
-        firix/authentik
     volumes:
       - crowdsec_data:/var/lib/crowdsec/data
       - crowdsec_config:/etc/crowdsec
       - traefik_logs:/var/log/traefik:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/log/auth.log:/var/log/auth.log:ro
       - /var/log/syslog:/var/log/syslog:ro
+      - /var/log/auth-crowdsec.log:/var/log/auth-crowdsec.log:ro
     expose:
       - "6060"  # Metrics port
     ports:
