@@ -36,3 +36,13 @@ Do not use rolling tags. If unclear query before writing the compose file.
 
 - Add `dump_pg` entry to `borgmatic/etc/borgmatic/hooks/dump-databases.sh`
 - Add raw DB volume path to `exclude_patterns` in `borgmatic/etc/borgmatic.d/config.yaml`
+
+## Documentation
+
+Before writing any Markdown documentation, check the `.markdownlint.yaml` for formatting rules.
+
+Keep documentation concise and centered around the "why" and "how". Avoid "what" unless it's
+non-obvious.
+
+Do not write belletristic prose. Use simple, direct language. Avoid flowery descriptions and
+unnecessary adjectives. Focus on clarity and utility.
