@@ -99,4 +99,4 @@ experimental:
       version: "v0.9.0"
     geoblock:
       moduleName: "github.com/PascalMinder/geoblock"
-      version: "v0.3.7"
+      version: "v0.3.8"
