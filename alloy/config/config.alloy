@@ -1,0 +1,60 @@
+// Grafana Alloy configuration for the VPS.
+//
+// Ships host syslog, the systemd journal, and Docker container logs to the
+// central Loki on the homeserver (100.69.1.1) over the Netbird mesh.
+//
+// NOTE: on Ubuntu, /var/log/syslog and the systemd journal overlap heavily.
+// Both sources are kept here per the rollout spec; trim one later if the
+// duplicate volume in Loki is undesirable.
+
+loki.source.file "syslog" {
+    targets = [{
+        __address__ = "localhost",
+        __path__    = "/var/log/syslog",
+        job         = "syslog",
+        host        = "vps",
+    }]
+    forward_to = [loki.write.default.receiver]
+}
+
+loki.source.journal "systemd" {
+    forward_to = [loki.write.default.receiver]
+    labels     = { job = "systemd", host = "vps" }
+}
+
+discovery.docker "docker" {
+    host             = "unix:///var/run/docker.sock"
+    refresh_interval = "5s"
+}
+
+discovery.relabel "docker" {
+    targets = []
+    rule {
+        source_labels = ["__meta_docker_container_name"]
+        regex         = "/(.*)"
+        target_label  = "container"
+    }
+    rule {
+        source_labels = ["__meta_docker_compose_project"]
+        target_label  = "compose_project"
+    }
+    rule {
+        source_labels = ["__meta_docker_compose_service"]
+        target_label  = "compose_service"
+    }
+}
+
+loki.source.docker "docker" {
+    host             = "unix:///var/run/docker.sock"
+    targets          = discovery.docker.docker.targets
+    forward_to       = [loki.write.default.receiver]
+    relabel_rules    = discovery.relabel.docker.rules
+    refresh_interval = "5s"
+}
+
+loki.write "default" {
+    endpoint {
+        url = "http://100.69.1.1:3100/loki/api/v1/push"
+    }
+    external_labels = { host = "vps" }
+}

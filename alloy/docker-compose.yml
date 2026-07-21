@@ -1,0 +1,51 @@
+---
+
+# docker-compose.yml for Grafana Alloy log shipping agent
+#
+# Collects host syslog, the systemd journal, and Docker container logs and
+# ships them to the central Loki on the homeserver (100.69.1.1) over the
+# Netbird mesh. Attached to the external `netbird` network so the container
+# can route to the mesh.
+
+name: alloy
+
+services:
+  alloy:
+    image: grafana/alloy:v1.18.0
+    container_name: alloy
+    restart: on-failure:3
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    networks:
+      - netbird
+    volumes:
+      - ./config/config.alloy:/etc/alloy/config.alloy:ro
+      - alloy_data:/var/lib/alloy/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/log/syslog:/var/log/syslog:ro
+      - /var/log/journal:/var/log/journal:ro
+      - /run/log/journal:/run/log/journal:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - "127.0.0.1:12345:12345"  # Alloy debug UI (local only)
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=false"
+
+networks:
+  netbird:
+    external: true
+
+volumes:
+  alloy_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/docker/volumes/alloy/data

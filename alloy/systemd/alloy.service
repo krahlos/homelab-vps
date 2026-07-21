@@ -1,0 +1,20 @@
+[Unit]
+Description=Docker compose stack for Grafana Alloy log shipping
+After=network.target
+Documentation=https://grafana.com/docs/alloy/latest/
+PartOf=homelab-vps-monitoring.target
+Requires=docker.service
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/homelab-vps/alloy
+ExecStart=/usr/bin/docker compose -p alloy up -d
+ExecStop=/usr/bin/docker compose -p alloy down
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=homelab-vps-monitoring.target
