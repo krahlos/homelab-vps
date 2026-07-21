@@ -14,7 +14,6 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-      - '--collector.systemd'
       - '--collector.processes'
     ports:
       - "9100:9100"
@@ -22,8 +21,6 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
-      - /run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
-      - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     pid: host
