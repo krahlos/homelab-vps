@@ -37,6 +37,7 @@ services:
     networks: [netbird]
     ports:
       - '3478:3478/udp'
+      - '100.69.0.1:9090:9090'  # metrics, bound to wt0
     volumes:
       - netbird_data:/var/lib/netbird
       - ./config.yaml:/etc/netbird/config.yaml
