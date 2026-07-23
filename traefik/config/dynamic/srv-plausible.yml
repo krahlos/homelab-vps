@@ -2,12 +2,15 @@
 
 # plausible.krahl.io — VPS ingress for the home-server Plausible Analytics instance.
 
+# Public exposure is restricted to the tracking paths only. Dashboard access is
+# via VPN/LAN directly to home Traefik.
+
 http:
   routers:
     plausible:
       entryPoints:
         - websecure
-      rule: Host(`plausible.krahl.io`)
+      rule: Host(`plausible.krahl.io`) && (PathPrefix(`/js/`) || Path(`/api/event`))
       service: plausible-backend@file
       tls:
         certResolver: letsencrypt-dns
