@@ -42,6 +42,11 @@ services:
       - netbird_data:/var/lib/netbird
       - ./config.yaml:/etc/netbird/config.yaml
     command: ["--config", "/etc/netbird/config.yaml"]
+    # Embedded Dex fetches the Authentik discovery doc server-side. Public path 403s:
+    # auth.krahl.io is a NetBird RP service with allowed_countries, and a hairpinned
+    # request has no GeoIP country. Pin to the homeserver mesh IP. See docs/NETBIRD_OIDC.md
+    extra_hosts:
+      - "auth.krahl.io:100.69.1.1"
     labels:
       - traefik.enable=true
       # gRPC router (needs h2c backend for HTTP/2 cleartext)
