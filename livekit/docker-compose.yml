@@ -1,0 +1,44 @@
+---
+
+# LiveKit SFU + MatrixRTC Authorization Service (Element Call backend).
+#
+# Both run network_mode: host. LiveKit must see the real public IP or it
+# advertises Docker bridge addresses as ICE candidates and no call connects;
+# lk-jwt-service follows so VPS Traefik reaches both on the bridge gateway.
+
+services:
+  livekit:
+    image: livekit/livekit-server:v1.13.4
+    container_name: livekit
+    restart: on-failure:3
+    network_mode: host
+    command: ["--config", "/etc/livekit.yaml"]
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+
+  lk-jwt-service:
+    # ghcr tags for this image carry no v prefix, unlike element-call
+    image: ghcr.io/element-hq/lk-jwt-service:0.5.0
+    container_name: lk-jwt-service
+    restart: on-failure:3
+    network_mode: host
+    depends_on:
+      - livekit
+    env_file:
+      - .env
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"

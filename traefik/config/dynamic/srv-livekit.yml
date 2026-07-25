@@ -1,0 +1,48 @@
+---
+
+# rtc.krahl.io — MatrixRTC backend (Element Call). Both upstreams run on the
+# host, so Traefik reaches them via the netbird bridge gateway 172.30.0.1,
+# not localhost. Path split per element-call docs/self_hosting.md.
+#
+# No websecure-protect chain here on purpose: a call opens many rapid requests
+# per participant and the rate limiter would drop them mid-call.
+
+http:
+  routers:
+    livekit-sfu:
+      entryPoints:
+        - websecure
+      rule: Host(`rtc.krahl.io`) && PathPrefix(`/livekit/sfu`)
+      service: livekit-sfu@file
+      middlewares:
+        - livekit-strip@file
+      tls:
+        certResolver: letsencrypt-dns
+
+    livekit-jwt:
+      entryPoints:
+        - websecure
+      rule: Host(`rtc.krahl.io`) && PathPrefix(`/livekit/jwt`)
+      service: livekit-jwt@file
+      middlewares:
+        - livekit-strip@file
+      tls:
+        certResolver: letsencrypt-dns
+
+  middlewares:
+    livekit-strip:
+      stripPrefix:
+        prefixes:
+          - "/livekit/sfu"
+          - "/livekit/jwt"
+
+  services:
+    livekit-sfu:
+      loadBalancer:
+        servers:
+          - url: "http://172.30.0.1:7880"
+
+    livekit-jwt:
+      loadBalancer:
+        servers:
+          - url: "http://172.30.0.1:8090"

@@ -1,0 +1,20 @@
+[Unit]
+Description=Docker compose stack for LiveKit SFU and MatrixRTC auth service
+Documentation=https://github.com/element-hq/element-call/blob/livekit/docs/self_hosting.md
+After=network.target
+PartOf=homelab-vps-infra.target
+Requires=docker.service
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/homelab-vps/livekit
+ExecStart=/usr/bin/docker compose -p livekit up -d
+ExecStop=/usr/bin/docker compose -p livekit down
+TimeoutStartSec=0
+Restart=on-failure
+
+[Install]
+WantedBy=homelab-vps-infra.target

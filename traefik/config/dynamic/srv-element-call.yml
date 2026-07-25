@@ -1,0 +1,29 @@
+---
+
+# call.krahl.io — VPS ingress for the home-server Element Call SPA.
+#
+# Interim: relays to home over NetBird like matrix.krahl.io. Step two moves
+# this host to the NetBird native reverse proxy, at which point this file goes
+# away. chat.krahl.io deliberately stays LAN/VPN-only and gets no route here.
+#
+# Only static SPA assets pass through; the media path is rtc.krahl.io, which
+# terminates on this host and never touches home. The CrowdSec/geoblock chain
+# runs on the home Traefik hop (websecure-protect@file on its router), matching
+# how srv-matrix-synapse.yml is set up.
+
+http:
+  routers:
+    matrix-element-call:
+      entryPoints:
+        - websecure
+      rule: Host(`call.krahl.io`)
+      service: matrix-element-call-backend@file
+      tls:
+        certResolver: letsencrypt-dns
+
+  services:
+    matrix-element-call-backend:
+      loadBalancer:
+        serversTransport: home-server-transport
+        servers:
+          - url: "https://100.69.1.1:443"
