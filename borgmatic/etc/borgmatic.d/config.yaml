@@ -14,6 +14,9 @@ source_directories:
   - /opt/homelab-vps
   # Service secrets — never skip these
   - /opt/secrets
+  # Named docker volumes — docker root is /var/lib/docker, not /data/docker
+  - /var/lib/docker/volumes/netbird_netbird_data
+  - /var/lib/docker/volumes/netbird_crowdsec_db
 
 exclude_patterns: []
 
