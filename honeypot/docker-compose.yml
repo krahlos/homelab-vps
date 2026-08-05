@@ -3,7 +3,7 @@
 # Docker Compose file for Cowrie Honeypot
 
 x-cowrie-base: &cowrie-base
-  image: cowrie/cowrie:3.0.10
+  image: cowrie/cowrie:3.0.12
   restart: unless-stopped
   user: "65534:65534"
   security_opt:
