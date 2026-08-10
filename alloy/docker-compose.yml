@@ -11,7 +11,7 @@ name: alloy
 
 services:
   alloy:
-    image: grafana/alloy:v1.18.0
+    image: grafana/alloy:v1.18.1
     container_name: alloy
     restart: on-failure:3
     command:
