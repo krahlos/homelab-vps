@@ -1,0 +1,6 @@
+# Words codespell must not flag, one per line, case-insensitive. Lines match whole,
+# so a comment can never mask a real word.
+
+# Log level as emitted by Netbird, quoted verbatim in docs/NETBIRD_OIDC.md. Left as
+# is because the doc reproduces real output, not prose.
+erro
