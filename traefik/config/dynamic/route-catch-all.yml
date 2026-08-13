@@ -1,8 +1,11 @@
 ---
 
 # Reject direct IP access and unmatched hosts.
-# noop@internal returns 200 with empty body — no real service is reached.
-# websecure-protect still applies so banned IPs get 403 from CrowdSec.
+#
+# No tls block and no default cert: HTTPS to an unknown host dies at the
+# handshake with a cert error, these routers never run. They only apply to
+# plain HTTP on :443 — noop@internal returns empty body, websecure-protect
+# still gives banned IPs a 403.
 
 http:
   routers:
