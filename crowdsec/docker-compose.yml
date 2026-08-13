@@ -37,6 +37,8 @@ services:
       - "6060"  # Metrics port
     ports:
       - "127.0.0.1:8180:8080"  # Local API port for host bouncer
+      - "100.69.0.1:6060:6060"  # Metrics, mesh only — scraped by the homeserver Prometheus
+      - "100.69.0.1:8180:8080"  # LAPI, mesh only — queried by the homeserver Grafana (Infinity)
     labels:
       - "traefik.enable=false"
 

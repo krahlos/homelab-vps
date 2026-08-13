@@ -52,6 +52,19 @@ loki.source.docker "docker" {
     refresh_interval = "5s"
 }
 
+// CrowdSec alerts, one JSON object per line, written by its `file` notification
+// plugin. Fields are extracted at query time with `| json` — keeping IP, scenario
+// and country out of the labels, they would explode Loki's stream cardinality.
+loki.source.file "crowdsec_alerts" {
+    targets = [{
+        __address__ = "localhost",
+        __path__    = "/var/log/crowdsec/alerts.json",
+        job         = "crowdsec-alerts",
+        host        = "vps",
+    }]
+    forward_to = [loki.write.default.receiver]
+}
+
 loki.write "default" {
     endpoint {
         url = "http://100.69.1.1:3100/loki/api/v1/push"
