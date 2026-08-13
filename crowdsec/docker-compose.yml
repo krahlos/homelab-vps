@@ -27,6 +27,7 @@ services:
     volumes:
       - crowdsec_data:/var/lib/crowdsec/data
       - crowdsec_config:/etc/crowdsec
+      - ./logs:/var/log/crowdsec
       - traefik_logs:/var/log/traefik:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
