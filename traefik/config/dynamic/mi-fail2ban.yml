@@ -22,5 +22,6 @@ http:
               - "192.168.178.0/24"    # FritzBox LAN
               - "10.0.0.0/24"         # WireGuard VPN
               - "100.64.0.0/10"       # Netbird VPN
+              - "194.39.218.0/27"     # Bosch office egress (AS9183)
           denylist:
             ip: []
