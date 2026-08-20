@@ -27,7 +27,7 @@ services:
 
   lk-jwt-service:
     # ghcr tags for this image carry no v prefix, unlike element-call
-    image: ghcr.io/element-hq/lk-jwt-service:0.5.0
+    image: ghcr.io/element-hq/lk-jwt-service:0.6.0
     container_name: lk-jwt-service
     restart: on-failure:3
     network_mode: host
