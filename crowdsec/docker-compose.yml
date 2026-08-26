@@ -8,7 +8,10 @@ services:
   crowdsec:
     image: crowdsecurity/crowdsec:v1.7.8
     container_name: crowdsec
-    restart: on-failure:3
+    # unless-stopped, not on-failure:N — a retry budget is spent permanently.
+    # A transient failure at boot (DNS, a late mesh address) exhausts it and
+    # leaves crowdsec down for good, taking the host firewall bouncer with it.
+    restart: unless-stopped
     networks:
       netbird:
         ipv4_address: 172.30.0.5
