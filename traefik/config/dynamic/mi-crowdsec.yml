@@ -11,8 +11,13 @@ http:
           crowdsecLapiKeyFile: /run/secrets/crowdsec_api_key
           crowdsecLapiHost: crowdsec:8080
           crowdsecLapiScheme: http
-          crowdsecMode: live
-          updateIntervalSeconds: 60
+          # stream, not live: live queries the LAPI per request, so the
+          # bouncer makes no calls at all while its one protected route is
+          # idle and "Last API pull" goes stale — indistinguishable from a
+          # dead bouncer. stream pulls on a timer, which makes the bouncer
+          # observable and matches p3-tiny.
+          crowdsecMode: stream
+          updateIntervalSeconds: 120
           defaultDecisionSeconds: 60
           httpTimeoutSeconds: 10
           crowdsecLapiTLSInsecureVerify: false
