@@ -8,7 +8,7 @@ services:
   node-exporter:
     image: prom/node-exporter:v1.12.1
     container_name: node-exporter
-    restart: on-failure:3
+    restart: unless-stopped
     command:
       - '--path.procfs=/host/proc'
       - '--path.rootfs=/rootfs'
@@ -41,7 +41,7 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.55.1
     container_name: cadvisor
-    restart: on-failure:3
+    restart: unless-stopped
     ports:
       - "8080:8080"
     volumes:

@@ -10,7 +10,7 @@ services:
   livekit:
     image: livekit/livekit-server:v1.13.6
     container_name: livekit
-    restart: on-failure:3
+    restart: unless-stopped
     network_mode: host
     command: ["--config", "/etc/livekit.yaml"]
     volumes:
@@ -29,7 +29,7 @@ services:
     # ghcr tags for this image carry no v prefix, unlike element-call
     image: ghcr.io/element-hq/lk-jwt-service:0.6.0
     container_name: lk-jwt-service
-    restart: on-failure:3
+    restart: unless-stopped
     network_mode: host
     depends_on:
       - livekit
