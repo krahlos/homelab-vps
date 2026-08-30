@@ -15,14 +15,20 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
       - '--collector.processes'
-    ports:
-      - "9100:9100"
+      # Host netns exposes every docker veth and bridge to the netdev
+      # collector; keep only the real uplink and the mesh interface.
+      - '--collector.netdev.device-exclude=^(veth.*|br-.*|docker0|lo)$$'
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+    # /proc/net is namespace-scoped, so bind-mounting host /proc still yields
+    # the container's own traffic counters. Host netns is the only way to get
+    # real byte/packet metrics for eth0. Safe without the published port:
+    # nftables input policy is drop and 9100 is accepted only on wt0.
+    network_mode: host
     pid: host
     uts: "host"
     user: "65534:65534"
