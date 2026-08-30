@@ -38,10 +38,14 @@ services:
       - /var/log/auth-crowdsec.log:/var/log/auth-crowdsec.log:ro
     expose:
       - "6060"  # Metrics port
+    # Bound to all interfaces rather than 100.69.0.1: that address does not
+    # exist until netbird.service has connected, so binding it makes container
+    # start depend on boot order (see fc208cd, which hit this on netbird-server).
+    # Neither port is open in the Hetzner cloud firewall, so in practice they
+    # are reachable only over wt0 and loopback.
     ports:
-      - "127.0.0.1:8180:8080"  # Local API port for host bouncer
-      - "100.69.0.1:6060:6060"  # Metrics, mesh only — scraped by the homeserver Prometheus
-      - "100.69.0.1:8180:8080"  # LAPI, mesh only — queried by the homeserver Grafana (Infinity)
+      - "6060:6060"  # Metrics — scraped by the homeserver Prometheus over the mesh
+      - "8180:8080"  # LAPI — host bouncer via loopback, homeserver Grafana over the mesh
     labels:
       - "traefik.enable=false"
 
