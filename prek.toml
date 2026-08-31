@@ -1,0 +1,142 @@
+# Configuration file for `prek`, a git hook framework written in Rust.
+# See https://prek.j178.dev for more information.
+#:schema https://www.schemastore.org/prek.json
+
+default_install_hook_types = ["pre-commit", "commit-msg", "pre-push"]
+minimum_pre_commit_version = "3.6.0"
+
+[[repos]]
+repo = "builtin"
+
+  [[repos.hooks]]
+  id = "check-added-large-files"
+  args = ["--maxkb=1000"]
+
+  [[repos.hooks]]
+  id = "check-merge-conflict"
+
+  [[repos.hooks]]
+  id = "check-toml"
+
+  [[repos.hooks]]
+  id = "check-yaml"
+
+  [[repos.hooks]]
+  id = "detect-private-key"
+
+  [[repos.hooks]]
+  id = "end-of-file-fixer"
+
+  [[repos.hooks]]
+  id = "trailing-whitespace"
+
+  [[repos.hooks]]
+  id = "check-case-conflict"
+
+  [[repos.hooks]]
+  id = "check-symlinks"
+
+  [[repos.hooks]]
+  id = "destroyed-symlinks"
+
+  [[repos.hooks]]
+  id = "mixed-line-ending"
+
+  [[repos.hooks]]
+  id = "check-vcs-permalinks"
+
+  [[repos.hooks]]
+  id = "check-executables-have-shebangs"
+
+# debug-statements has no builtin implementation yet
+[[repos]]
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+rev = "v4.4.0"
+
+  [[repos.hooks]]
+  id = "debug-statements"
+
+[[repos]]
+repo = "https://github.com/adrienverge/yamllint.git"
+rev = "v1.29.0"
+
+  [[repos.hooks]]
+  id = "yamllint"
+  args = ["--strict", "--config-file=.yamllint.yml"]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.9.1"
+
+  [[repos.hooks]]
+  id = "ruff"
+  args = ["--fix", "--config", "ruff.toml"]
+
+  [[repos.hooks]]
+  id = "ruff-format"
+  args = ["--config", "ruff.toml"]
+
+[[repos]]
+repo = "https://github.com/compilerla/conventional-pre-commit"
+rev = "v4.3.0"
+
+  [[repos.hooks]]
+  id = "conventional-pre-commit"
+  stages = ["commit-msg"]
+  args = ["--verbose"]
+
+[[repos]]
+repo = "https://github.com/DavidAnson/markdownlint-cli2"
+rev = "v0.21.0"
+
+  [[repos.hooks]]
+  id = "markdownlint-cli2"
+  args = ["--fix"]
+
+[[repos]]
+repo = "https://github.com/koalaman/shellcheck-precommit"
+rev = "v0.11.0"
+
+  [[repos.hooks]]
+  id = "shellcheck"
+
+[[repos]]
+repo = "https://github.com/scop/pre-commit-shfmt"
+rev = "v3.13.1-1"
+
+  [[repos.hooks]]
+  id = "shfmt"
+  args = ["-i", "2", "-ci", "-s", "-bn"]
+  files = '\.sh$'
+
+[[repos]]
+repo = "https://github.com/codespell-project/codespell"
+rev = "v2.2.6"
+
+  [[repos.hooks]]
+  id = "codespell"
+  args = ["--write-changes", "--ignore-words=.codespellignore"]
+
+[[repos]]
+repo = "https://github.com/Yelp/detect-secrets"
+rev = "v1.5.0"
+
+  [[repos.hooks]]
+  id = "detect-secrets"
+  args = ["--baseline", ".secrets.baseline"]
+
+[[repos]]
+repo = "https://github.com/ComPWA/taplo-pre-commit"
+rev = "v0.9.3"
+
+  [[repos.hooks]]
+  id = "taplo-format"
+
+[[repos]]
+repo = "meta"
+
+  [[repos.hooks]]
+  id = "check-hooks-apply"
+
+  [[repos.hooks]]
+  id = "check-useless-excludes"
