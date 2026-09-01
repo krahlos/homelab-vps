@@ -1,6 +1,6 @@
 # LiveKit
 
-MatrixRTC backend for Element Call: the LiveKit SFU plus the
+MatrixRTC media backend for Matrix calls: the LiveKit SFU plus the
 [MatrixRTC Authorization Service][lk-jwt] (`lk-jwt-service`), which trades a
 Matrix OpenID token for a LiveKit JWT.
 
@@ -9,7 +9,9 @@ Public entry is `rtc.krahl.io` via VPS Traefik
 (SFU WebSocket) and `/livekit/jwt` (auth). Signalling for Matrix itself is
 unchanged and still goes to Synapse at home.
 
-Plan and phase order: [`docs/MATRIX_VOIP.md`][plan] in the home-server repo.
+Matrix-side setup — Synapse config, the `rtc_foci` announcement, the Pi-hole
+carve-out, glossary and end-to-end verification: [`matrix/README.md` §
+Voice-over-IP][plan] in the home-server repo.
 
 ## Why it runs here and not on the home server
 
@@ -33,12 +35,12 @@ and is already the ingress, so media terminates here.
   clients in the JWT; a loopback value makes every client dial itself.
 - **No CrowdSec/geoblock/rate-limiter chain on these routers.** A call opens
   many rapid requests per participant and the rate limiter drops them mid-call.
-- **`lk-jwt-service` ghcr tags carry no `v` prefix** (`0.5.0`), while
-  `element-call` from the same org does (`v0.22.0`). Taking the git release tag
-  gives `not found` at pull time.
+- **`lk-jwt-service` ghcr tags carry no `v` prefix** (`0.5.0`), unlike the git
+  release tag. Copying the release tag verbatim gives `not found` at pull time.
 - **Pi-hole needs `server=/rtc.krahl.io/#`.** The `krahl.io` wildcard otherwise
-  points LAN clients at the home server and every call from home breaks.
-
+  points LAN clients at the home server and every call from home breaks. It
+  answers with the home Traefik `reject-catchall` 418, while calls from cellular
+  keep working — so it reads as a client fault, not DNS.
 - **UDP socket buffers.** The kernel default is too small for an SFU and the
   kernel drops media datagrams under load — choppy audio, frozen video, no
   connection error. `homelab-vps/etc/sysctl.d/99-livekit.conf` raises
@@ -66,4 +68,4 @@ curl -s https://rtc.krahl.io/livekit/jwt/healthz
 ```
 
 [lk-jwt]: https://github.com/element-hq/lk-jwt-service
-[plan]: https://github.com/krahlos/homelab/blob/main/docs/MATRIX_VOIP.md
+[plan]: https://github.com/krahlos/homelab/blob/main/matrix/README.md#voice-over-ip-voip
