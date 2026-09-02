@@ -6,7 +6,7 @@ name: crowdsec
 
 services:
   crowdsec:
-    image: crowdsecurity/crowdsec:v1.7.8
+    image: crowdsecurity/crowdsec:v1.8.0
     container_name: crowdsec
     # unless-stopped, not on-failure:N — a retry budget is spent permanently.
     # A transient failure at boot (DNS, a late mesh address) exhausts it and
