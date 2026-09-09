@@ -10,6 +10,9 @@ Requires=docker.service
 
 [Service]
 Type=oneshot
+# Notification volume, read by etc/borgmatic/hooks/notify.sh:
+#   always | no-success (errors only) | never
+Environment=NOTIFY=no-success
 # Raise the nofile limit so borg can handle large archives
 LimitNOFILE=524288
 

@@ -2,18 +2,27 @@
 # notify.sh — borgmatic hook that sends notifications via dispatcher
 #
 # Usage: notify.sh <success|error>
+#
+# NOTIFY controls when:
+#   always (default) — send every notification
+#   no-success       — skip the nightly success notice
+#   never            — stderr only
 
 set -euo pipefail
 
 DISPATCHER_URL="${DISPATCHER_URL:-http://100.69.1.1:5001}"
 STATUS="${1:-unknown}"
 HOSTNAME="$(hostname -s)"
+NOTIFY="${NOTIFY:-always}"
 
 if [ -z "$HOSTNAME" ]; then
     HOSTNAME="homelab-vps"
 fi
 
+[ "$NOTIFY" = never ] && exit 0
+
 if [ "$STATUS" = "success" ]; then
+    [ "$NOTIFY" = "no-success" ] && exit 0
     BODY="✅ Backup completed successfully on \`${HOSTNAME}\`"
     HTML="<b>✅ Backup completed successfully</b> on <code>${HOSTNAME}</code>"
 else
