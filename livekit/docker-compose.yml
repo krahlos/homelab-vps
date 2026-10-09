@@ -8,7 +8,7 @@
 
 services:
   livekit:
-    image: livekit/livekit-server:v1.13.7
+    image: livekit/livekit-server:v1.13.9
     container_name: livekit
     restart: unless-stopped
     network_mode: host
@@ -27,7 +27,7 @@ services:
 
   lk-jwt-service:
     # ghcr tags for this image carry no v prefix, unlike element-call
-    image: ghcr.io/element-hq/lk-jwt-service:0.7.0
+    image: ghcr.io/element-hq/lk-jwt-service:0.8.0
     container_name: lk-jwt-service
     restart: unless-stopped
     network_mode: host
